@@ -1,21 +1,39 @@
-var http = require('http')
+const http = require('http')
+const fs = require('fs');
 
 http.createServer( (req, res) => {
 
-    res.setHeader("Content-Type", "text/html");
+    res.writeHead(200, { 'Content-Type':'text/html'});
 
-    var url = req.url;
-
-    if(url === 'about') {
-        res.write(' Welcome to about us page')
+    const url = req.url;
+console.log(url)
+    if(url === '/index') {
+        fs.readFile('./index.html',(err, data) => {
+            if (err) throw err;
+            res.write(data);
+            res.end()
+        });
     }
+    else if (url === '/about') {
+        fs.readFile('./about.html',(err, data) => {
+            if (err) throw err;
+            res.write(data);
+            res.end()
+        });
+    } 
     else if (url === '/contact') {
-        res.write(' Welcome to contact us page');
-        res.end();
+        fs.readFile('./contact-me.html',(err, data) => {
+            if (err) throw err;
+            res.write(data);
+            res.end()
+        });
     } 
     else {
-        res.write('Hello World!');
-        res.end();
+        fs.readFile('./404.html',(err, data) => {
+            if (err) throw err;
+            res.write(data);
+            res.end()
+        });
     }
 }).listen(3000, () => {
     console.log("server start at port 3000")
